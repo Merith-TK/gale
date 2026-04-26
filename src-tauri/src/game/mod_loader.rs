@@ -88,7 +88,12 @@ impl ModLoader<'_> {
     pub fn mod_config_dirs(&self) -> &[&str] {
         match &self.kind {
             ModLoaderKind::BepInEx { .. } => &["BepInEx/config"],
-            ModLoaderKind::BepisLoader { .. } => &["BepInEx/config", "Renderer/BepInEx/config"],
+            ModLoaderKind::BepisLoader { .. } => &[
+                "BepInEx/config", 
+                "Renderer/BepInEx/config",
+                "rml_config",
+                "MonkeyLoader/Config"
+            ],
             ModLoaderKind::MelonLoader { .. } => &["."],
             ModLoaderKind::GDWeave {} => &["GDWeave/configs"],
             ModLoaderKind::Northstar {} => &["."],
@@ -128,6 +133,14 @@ impl ModLoader<'static> {
                     Subdir::flat_separated("monomod", "BepInEx/monomod").extension(".mm.dll"),
                     Subdir::flat_separated("core", "BepInEx/core"),
                     Subdir::untracked("config", "BepInEx/config").mutable(),
+                    // ResoniteModLoader support
+                    Subdir::untracked("rml_mods", "rml_mods"),
+                    Subdir::untracked("rml_libs", "rml_libs"),
+                    Subdir::untracked("rml_config", "rml_config").mutable(),
+                    // MonkeyLoader support
+                    Subdir::flat_separated("monkey_mods", "MonkeyLoader/Mods").extension(".nupkg"),
+                    Subdir::flat_separated("monkey_gamepacks", "MonkeyLoader/GamePacks"),
+                    Subdir::untracked("monkey_config", "MonkeyLoader/Config").mutable(),
                 ];
 
                 Box::new(
